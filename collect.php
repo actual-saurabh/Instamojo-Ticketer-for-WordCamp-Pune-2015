@@ -145,9 +145,6 @@ $inserted = $wpdb->insert(
 	) 
 );
 
-error_log($inserted);
-
-
 // payment has failed, exit before ticket is generated
 if ( $status != 'Credit' )
     exit;
