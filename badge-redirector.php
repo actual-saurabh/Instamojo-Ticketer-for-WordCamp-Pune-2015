@@ -13,10 +13,11 @@ switch ( $type ) {
     case 'organiser':
         $url .= 'organisers/';
         break;
+    case 'supporter':
     case 'attendee':
     case 'sponsor':
     default:
-        $url .='';
+        $url .='tickets/';
         break;
 }
 wp_redirect($url);
