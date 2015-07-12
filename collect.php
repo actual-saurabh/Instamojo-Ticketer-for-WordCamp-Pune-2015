@@ -54,6 +54,7 @@ $types = array(
         'VOLR', // Volunteeers
         'SPON', // Sponsors
         'ATND', // Others
+        'ORGR', // Organisers
 );
 
 */
@@ -187,7 +188,7 @@ add_filter( 'wp_mail_content_type', 'set_html_content_type' );
 $to = $name . ' <' . $email . '> ';
 
 //prepare headers
-$headers[] = "From: WordCamp Pune <no-reply@ticket.wordcamp.wppune.org>";
+$headers[] = "From: WordCamp Pune <noreply@wppune.org>";
 //$headers[] = "Bcc: punewc2015org@googlegroups.com";
 
 // send mail

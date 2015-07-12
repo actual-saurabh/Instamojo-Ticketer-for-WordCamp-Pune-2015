@@ -67,7 +67,7 @@ switch ( $type ) {
     <body>
         <h1>I<?php echo $verbs[ $type ]; ?> WordCamp Pune 2015 on 6th September 2015 at Modern College of Arts, Science and Commerce</h1>
         <img src="https://pune.wordcamp.org/2015/files/2015/07/<?php echo $type; ?>-500x250.<?php echo $extn; ?>">
-        <p class="notice">I may see you at WordCamp Pune 2015, a one day long conference and uncoference of WordPress lovers with loads of useful and interactive sessions, fun activities and lot of networking.</p>
+        <p class="notice">I may see you at WordCamp Pune 2015, a one day long conference and unconference of WordPress lovers with loads of useful and interactive sessions, fun activities and lot of networking.</p>
         <p style="padding-bottom:0;"><img src="<?php echo get_stylesheet_directory_uri(); ?>/email/images/loading.gif"></p>
         <p style="padding-top:0;">Taking you to WordCamp Pune</p>
         <p style="padding-top:0;"><a style="color:#ef7c00; font-weight:bold; text-decoration:none;" href="<?php echo $url; ?>">[or click here]</a></p>

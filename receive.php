@@ -33,7 +33,7 @@
                 background:#4d515d none;
                 color: #E5E5E5;
             }
-            #container #support-more{
+            #container .support-more{
                 background: #fff none;
             }
             #container .badges{
@@ -51,7 +51,7 @@
                 background: #555 none;
                 border: #fff 10px solid;
             }
-            #container .badges pre{
+            #container pre{
                 background: #fefefe none;
                 white-space: pre-wrap;
                 word-wrap: break-word;
@@ -62,6 +62,13 @@
             }
             #container .badges code{
                 background: #fff none;
+            }
+            #container .shareable{
+                padding:0 0 20px 0;
+                background: #EAEBEF none;
+            }
+            .shareable img{
+                max-width: 100%;
             }
             @media only screen and (max-width: 500px) {
                 #container{
@@ -86,7 +93,7 @@
 
             </div>
             
-                <div id="support-more">
+                <div class="support-more">
                     <p>You could display some badges on your blog's sidebar or elsewhere to support WordCamp Pune 2015.</p>
                     <p>Just copy the code provided under the <em>transparent</em> image of your choice into a text widget.</p>
                 </div>
@@ -105,6 +112,14 @@
 &lt;img src="https://pune.wordcamp.org/2015/files/2015/07/attendee-white.png" /&gt;
 &lt;/a&gt;</pre>
                 </div>
+            <div class="support-more">
+                <p>There's also a shareable social media badge. Here is the sponsor's version of it:</p>
+            </div>
+            <div class="shareable">
+                <a href="https://pune.wordcamp.org/2015/files/2015/07/attendee-500x250.jpg"><img src="https://pune.wordcamp.org/2015/files/2015/07/attendee-500x250.jpg"></a>
+                <p>Or you could share this link</p>
+                <pre>http://ticket.wordcamp.wppune.org/shareable/?type=attendee</pre>
+            </div>
             
             <div id="foot">
                 <p>Please check your spam folder if you don't receive your ticket in a while.</p>
