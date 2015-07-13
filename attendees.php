@@ -75,6 +75,12 @@ $incr = 0;
 
             $count ++;
             $twitter = stripslashes( preg_replace( '/^((http(s)*:\/\/)*twitter.com\/)*(@)*/i', '', $attendee->twitter ) );
+			if ( !filter_var( $attendee->website, FILTER_VALIDATE_URL ) ) {
+				$attendee->website = 'http://' . $attendee->website;
+				if ( !filter_var( $attendee->website, FILTER_VALIDATE_URL ) ) {
+					$attendee->website = null;
+				}
+			}
             $party = boolval( $attendee->party );
             switch ( strtoupper( $attendee->type ) ) {
                 case 'ORGR':
