@@ -144,7 +144,4 @@ $content	 = array(
 	'post_content' => $post_content,
 );
 $status		 = $wpClient->editPost( 12, $content );
-if ( $status !== true ) {
-	echo $post_content;
-}
 		
