@@ -206,3 +206,5 @@ remove_filter( 'wp_mail_content_type', 'set_html_content_type' );
 function set_html_content_type() {
 	return 'text/html';
 }
+
+include_once trailingslashit( get_stylesheet_directory() ).'/attendees.php';
