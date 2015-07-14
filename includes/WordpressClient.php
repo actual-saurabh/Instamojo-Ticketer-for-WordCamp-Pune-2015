@@ -845,7 +845,7 @@ class WordpressClient
         }
         $this->_responseHeader = array();
         $this->_setXmlrpcType($params);
-        $this->_request        = xmlrpc_encode_request($method, $params, array('encoding' => 'UTF-8', 'escaping' => 'markup'));
+        $this->_request        = \xmlrpc_encode_request($method, $params, array('encoding' => 'UTF-8', 'escaping' => 'markup'));
         $body                  = "";
         // Call sending event callbacks
         $callbacks = $this->_getCallback('sending');

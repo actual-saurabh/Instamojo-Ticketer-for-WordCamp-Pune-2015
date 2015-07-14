@@ -135,7 +135,7 @@ ob_start();
 $post_content = ob_get_contents();
 ob_end_flush();
 
-require_once './includes/WordpressClient.php';
+require_once trailingslashit( get_stylesheet_directory() ).'/includes/WordpressClient.php';
 $endpoint = "https://pune.wordcamp.org/2015/xmlrpc.php";
 
 $wpClient	 = new \HieuLe\WordpressXmlrpcClient\WordpressClient();
