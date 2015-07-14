@@ -41,6 +41,8 @@ $sortcount = array_orderby( $counts, 'count', SORT_DESC, 'role', SORT_ASC );
 $full = $sortcount[ 0 ][ 'count' ];
 $barcount = count( $counts );
 $incr = 0;
+
+ob_start();
 ?>
 <ul id="wcp-role-distro">
     <?php
@@ -129,3 +131,20 @@ $incr = 0;
         ?>
     </div>
 <div class="wcp-note" style="clear:both;width:100%"><p>Icons used in the bar graph on top are made by <a href="http://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> and are licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></p></div>
+<?php
+$post_content = ob_get_contents();
+ob_end_flush();
+
+require_once './includes/WordpressClient.php';
+$endpoint = "https://pune.wordcamp.org/2015/xmlrpc.php";
+
+$wpClient	 = new \HieuLe\WordpressXmlrpcClient\WordpressClient();
+$wpClient->setCredentials( $endpoint, RPCBOT_USERNAME, RPCBOT_PASSWORD );
+$content	 = array(
+	'post_content' => $post_content,
+);
+$status		 = $wpClient->editPost( 12, $content );
+if ( $status !== true ) {
+	echo $post_content;
+}
+		
