@@ -7,7 +7,7 @@ global $wpdb;
 
 $tbl = $wpdb->prefix . 'wcp_tickets';
 
-$counts = $wpdb->get_results( "SELECT `role`, COUNT(*) as count FROM $tbl GROUP BY `role` LIMIT 5" );
+$counts = $wpdb->get_results( "SELECT `role`, COUNT(*) as count FROM $tbl GROUP BY `role`" );
 
 $roles = array(
         'Writer/ Blogger',
@@ -41,7 +41,6 @@ $sortcount = array_orderby( $counts, 'count', SORT_DESC, 'role', SORT_ASC );
 $full = $sortcount[ 0 ][ 'count' ];
 $barcount = count( $counts );
 $incr = 0;
-
 ob_start();
 ?>
 <ul id="wcp-role-distro">
@@ -50,7 +49,7 @@ ob_start();
         if ( in_array( $role[ 'role' ], $roles ) ) {
 
             $role_img = explode( '/', $role[ 'role' ] );
-            $role_img = strtolower( trim( $role_img[ 0 ] ) );
+            $role_img = strtolower( trim(str_replace(' ', '-',  $role_img[ 0 ] ) ) );
             ?>
             <li style="height:<?php echo round( ($role[ 'count' ] / $full * 100) * 3 / 4, 2 ); ?>%;left:<?php echo round( $incr / $barcount * 100 ); ?>%;" title="<?php echo $role[ 'role' ] . '(s)'; ?>"><span><img src="https://pune.wordcamp.org/2015/files/2015/07/<?php echo strtolower( $role_img ); ?>.png" alt="<?php echo $role[ 'role' ] . '(s)'; ?>" width="24" height="24" /><sup><?php echo $role[ 'count' ]; ?></sup></span></li>
             <?php
