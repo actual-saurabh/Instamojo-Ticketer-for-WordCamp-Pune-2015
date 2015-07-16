@@ -35,6 +35,8 @@ function array_orderby() {
 }
 
 $counts = json_decode( json_encode( $counts ), true );
+$total = array_sum(array_column($counts, 'count'));
+$percent = intval($total)/5;
 $sortcount = $counts;
 $sortcount = array_orderby( $counts, 'count', SORT_DESC, 'role', SORT_ASC );
 
@@ -58,6 +60,17 @@ ob_start();
     }
     ?>
 </ul>
+<div id="wcp-ticket-progress">
+<div id="wcp-progress-bar" style="width: <?php echo $percent; ?>%">
+<div id="wcp-progress-anim">
+<div class="wcp-progress-count" style="
+    z-index: 90;
+    right: 23px;
+"><?php echo $total; ?></div>
+</div>
+</div>
+  <div class="wcp-progress-count">/500</div>
+</div>
 <ul id="wcp-attendees-legend">
     <li><i class="icon-twitter"></i> Twitter</li>
     <li><i class="icon-link"></i> Website</li>
