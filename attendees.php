@@ -109,6 +109,9 @@ ob_start();
                     $icon = 'hand-up';
                     $alt = 'Volunteer';
                     break;
+                case 'PHOT':
+                    $icon = 'camera';
+                    $alt = 'Photography Volunteer';
                 default:
                     $icon = '';
                     break;
