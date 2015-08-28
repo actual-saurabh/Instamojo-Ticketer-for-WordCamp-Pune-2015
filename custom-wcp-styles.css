@@ -1402,6 +1402,74 @@ ul.wcps-meta li.wcps-language {
     border: 1px #666 solid;
 }
 
+article#post-3333 {
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    margin-top: -8.3333%;
+}
+
+article#post-3333 header, article#post-3333 footer{
+    display:none;
+}
+
+#post-3333 a.panel{
+    position:relative;
+    margin:0;
+    padding:0;
+    overflow:auto;
+    text-decoration:none;
+    border:none;
+    display:block;
+    margin-top:20px;
+}
+
+#post-3333 a.panel span {
+    display: none;
+    background: #88153e;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    line-height: 100%;
+    text-align: center;
+    background: #88153e;
+}
+
+#post-3333 a.panel:hover span {
+    display: block; 
+}
+
+#post-3333 a.panel img{
+    float:left;
+    max-width:640px;
+    padding:0;
+    margin:0;
+}
+
+article#post-3333 a.callaction{
+    text-align:center;
+    display:block;
+    font-weight:bold;
+}
+
+article#post-3333 a.credit{
+    font-size: 0.7em;
+    text-align:center;
+    display:block;
+    border:none;
+    margin-top:10px;
+}
+
+article#post-3333 .entry-content {
+    padding: 0 10%;
+}
+
+#content article#post-3333 div.sharedaddy, #main article#post-3333 div.sharedaddy{
+    display:none;
+}
 @media screen and (max-width: 540px) {
 	article#post-1267 {
 		margin: -8.333% 8.333% 8.333%;

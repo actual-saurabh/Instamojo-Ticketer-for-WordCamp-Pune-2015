@@ -1,42 +1,15 @@
-var gCtx = null;
+var gContext = null;
 var gCanvas = null;
 var c = 0;
 var stype = 0;
 var gUM = false;
 var webkit = false;
 var moz = false;
-var v = null;
-
-var imgElem = jQuery( '<div id="qrfile"><canvas id="out-canvas" width="320" height="240"></canvas>' +
-        '<div id="imghelp">drag and drop a QRCode here' +
-        '<br>or select a file' +
-        '<input type="file" />' + // onchange="handleFiles(this.files)"
-        '</div>' +
-        '</div>' );
+var v = null, n;
 
 var vidElem = jQuery( '<video id="v" autoplay></video>' );
 
-
-function handleFiles( f )
-{
-    var o = [ ];
-
-    for ( var i = 0; i < f.length; i++ )
-    {
-        var reader = new FileReader();
-        reader.onload = ( function( theFile ) {
-            return function( e ) {
-                gCtx.clearRect( 0, 0, gCanvas.width, gCanvas.height );
-
-                qrcode.decode( e.target.result );
-            };
-        } )( f[i] );
-        reader.readAsDataURL( f[i] );
-    }
-}
-
-function initCanvas( w, h )
-{
+function initCanvas( w, h ) {
     gCanvas = jQuery( "#qr-canvas" );
     gCanvas.css( {
         'width': w + "px",
@@ -44,8 +17,8 @@ function initCanvas( w, h )
     } );
     gCanvas.width = w;
     gCanvas.height = h;
-    gCtx = gCanvas[0].getContext( "2d" );
-    gCtx.clearRect( 0, 0, w, h );
+    gContext = gCanvas[0].getContext( "2d" );
+    gContext.clearRect( 0, 0, w, h );
 }
 
 
@@ -55,7 +28,7 @@ function captureToCanvas() {
     if ( gUM )
     {
         try {
-            gCtx.drawImage( v, 0, 0 );
+            gContext.drawImage( v, 0, 0 );
             try {
                 qrcode.decode();
             }
@@ -72,14 +45,40 @@ function captureToCanvas() {
         ;
     }
 }
+function readqr( a ) {
 
-function htmlEntities( str ) {
-    return String( str ).replace( /&/g, '&amp;' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' ).replace( /"/g, '&quot;' );
+    if ( null === a ) {
+        return;
+    }
+
+    do_ajax( { 'code': a } );
+
 }
 
-function read( a )
-{
-    console.log(a);
+function readinput( inputs ) {
+
+    objInputs = { };
+    jQuery.each( inputs, function( i, field ) {
+        objInputs[field.name] = field.value;
+    } );
+
+    do_ajax( objInputs );
+}
+
+function do_ajax( object ) {
+    jQuery.get(
+            'http://ticket.wordcamp.wppune.org/result/',
+            object,
+            function( response ) {
+                if ( response != 'not-yet' ) {
+                    jQuery( '#result' ).html( response );
+                    jQuery( "#mainbody" ).removeClass().addClass( 'scanned' ).css(
+                            { height: jQuery( '#result' ).height() }
+                    );
+
+                }
+            }
+    );
 }
 
 function isCanvasSupported() {
@@ -87,16 +86,8 @@ function isCanvasSupported() {
     return !!( elem.getContext && elem.getContext( '2d' ) );
 }
 function success( stream ) {
-    if ( webkit )
-        v.src = window.webkitURL.createObjectURL( stream );
-    else
-    if ( moz )
-    {
-        v.mozSrcObject = stream;
-        v.play();
-    }
-    else
-        v.src = stream;
+    window.stream = stream; // make stream available to console
+    v.src = window.URL.createObjectURL( stream );
     gUM = true;
     setTimeout( captureToCanvas, 500 );
 }
@@ -106,13 +97,26 @@ function error( error ) {
     return;
 }
 
-function load()
-{
-    if ( isCanvasSupported() && window.File && window.FileReader )
-    {
-        initCanvas( 800, 600 );
-        qrcode.callback = read;
-        setwebcam();
+function load() {
+    if ( isCanvasSupported() && window.File && window.FileReader ) {
+        initCanvas( 460, 300 );
+        qrcode.callback = readqr;
+        jQuery( "#mainbody" ).removeClass().addClass( 'scanning' );
+        if ( stype == 1 )
+        {
+            setTimeout( captureToCanvas, 500 );
+            return;
+        }
+        jQuery( "#outdiv" ).append( vidElem );
+        startwebcam();
+        jQuery( '#camselect' ).on( 'change', function( e ) {
+            if ( !!window.stream ) {
+                v.src = null;
+                window.stream.stop();
+            }
+
+            startwebcam();
+        } );
     }
     else
     {
@@ -122,19 +126,24 @@ function load()
     }
 }
 
+function formdriver() {
+    jQuery( '#form-tab' ).on( 'blur', 'input', function( e ) {
+        e.preventDefault();
+        console.log(jQuery(this));
+        inputs = jQuery( '#id-form' ).serializeArray();
+        readinput( inputs );
 
-function setwebcam() {
-    jQuery( "#result" ).html( "- scanning -" );
-    if ( stype == 1 )
-    {
-        setTimeout( captureToCanvas, 500 );
-        return;
-    }
-    var n = navigator;
-    jQuery( "#outdiv" ).append( vidhtml );
-    v = document.getElementById( "v" );
+    } ).on( 'keyup', 'input', function( e ) {
 
-    var videoSource = jQuery('#camselect').val();
+        jQuery( "#mainbody" ).removeClass().addClass( 'scanning' );
+    } );
+}
+
+
+function startwebcam() {
+    v = jQuery( "#v" )[0];
+
+    var videoSource = jQuery( '#camselect' ).val();
     var constraints = {
         video: {
             optional: [ {
@@ -144,20 +153,7 @@ function setwebcam() {
         audio: false
     };
 
-    if ( n.getUserMedia )
-        n.getUserMedia( constraints, success, error );
-    else
-    if ( n.webkitGetUserMedia )
-    {
-        webkit = true;
-        n.webkitGetUserMedia( constraints, success, error );
-    }
-    else
-    if ( n.mozGetUserMedia )
-    {
-        moz = true;
-        n.mozGetUserMedia( constraints, success, error );
-    }
+    n.getUserMedia( constraints, success, error );
 
     jQuery( "#qrimg" ).css( 'opacity', 0.2 );
     jQuery( "#webcamimg" ).css( 'opacity', 1 );
@@ -165,47 +161,38 @@ function setwebcam() {
     stype = 1;
     setTimeout( captureToCanvas, 500 );
 }
-function setimg()
-{
-    jQuery( "#result" ).html( '' );
-    if ( stype == 2 )
-        return;
-    jQuery( "#outdiv" ).append( imgElem );
-    jQuery( "#qrimg" ).css( 'opacity', 1 );
-    jQuery( "#webcamimg" ).css( 'opacity', 0.2 );
-    jQuery( "#qrfile" ).on( "dragenter", function( e ) {
-        e.stopPropagation();
-        e.preventDefault();
-    } ).on( "dragover", function( e ) {
-        e.stopPropagation();
-        e.preventDefault();
-    } ).on( "drop", function( e ) {
-        e.stopPropagation();
-        e.preventDefault();
-
-        var dt = e.dataTransfer;
-        var files = dt.files;
-        if ( files.length > 0 )
-        {
-            handleFiles( files );
-        }
-        else
-        if ( dt.getData( 'URL' ) )
-        {
-            qrcode.decode( dt.getData( 'URL' ) );
-        }
-    } );
-    stype = 2;
-}
 
 function gotSources( sourceInfos ) {
     for ( var i = 0; i !== sourceInfos.length; ++i ) {
         var sourceInfo = sourceInfos[i];
-        var option = jQuery( 'option' );
-        option.val(sourceInfo.id);
+
+        var option = jQuery( '<option/>' );
+        option.val( sourceInfo.id );
         if ( sourceInfo.kind === 'video' ) {
-            option.text (sourceInfo.label || camera + ( jQuery('#camselect').length + 1 ));
-            jQuery('#camselect').append( option );
+            option.text( sourceInfo.label + ' camera ' + ( jQuery( '#camselect option' ).length + 1 ) );
+            jQuery( '#camselect' ).append( option );
         }
     }
 }
+
+jQuery( 'document' ).ready( function() {
+    if ( typeof MediaStreamTrack === 'undefined' ||
+            typeof MediaStreamTrack.getSources === 'undefined' ) {
+        alert( 'This browser does not support MediaStreamTrack.\n\nTry Chrome.' );
+    } else {
+        MediaStreamTrack.getSources( gotSources );
+    }
+    n = navigator;
+    n.getUserMedia = n.getUserMedia ||
+            n.webkitGetUserMedia || n.mozGetUserMedia;
+    load();
+
+    formdriver();
+    
+    jQuery('#mainbody').on('click', '#result #close', function(e){
+        e.preventDefault();
+        jQuery('#result').html('');
+        jQuery('#mainbody').removeClass().addClass('scanning');
+    });
+
+} );
