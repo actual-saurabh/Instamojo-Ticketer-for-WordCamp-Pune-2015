@@ -55,7 +55,29 @@ switch ( strtoupper( $attendee->type ) ) {
                     $tpref = 'Men&quot;s';
                     break;
             }
-
+if(  is_user_logged_in()){
+	if(isset($_GET['remove_attendance']) && $_GET['remove_attendance'] == 1){
+		if($attendee->attendance == 1){
+			$query = "UPDATE $tbl SET `attendance` = '0' WHERE `$tbl`.`ticket_id` = $attendee->ticket_id;";
+			$wpdb->query($query);
+			$message = 'Attendance Removed';
+			$showbutton = false;
+		} else {
+			$message = 'Attendance is not marked already';
+			$showbutton = false;
+		}
+	}
+	else if($attendee->attendance == 0){
+		$query = "UPDATE $tbl SET `attendance` = '1' WHERE `$tbl`.`ticket_id` = $attendee->ticket_id;";
+		$wpdb->query($query);
+		$message = 'Attedance marked';
+		$showbutton = true;
+	} else {
+		$message = 'Attendance already marked';
+		$showbutton = true;
+	}
+	
+}
 ?>
 <div class="wcp-attendee">
     <a id="close" href="#">Close [x]</a>
@@ -67,5 +89,9 @@ switch ( strtoupper( $attendee->type ) ) {
     <p class="codes"><?php echo $attendee->code; ?></p>
     <p class="codes"><?php echo $attendee->payment_id; ?></p>
     <p class="codes"><?php echo $attendee->coupon; ?></p>
+	<p class="descr"><?php echo $message; ?></p>
+	<?php if ($showbutton) {?>
+	<button id="remove_attendance" onclick="remove_attendance()">Remove Attendance</button>
+	<?php } ?>
 </div>
 

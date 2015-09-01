@@ -65,9 +65,14 @@ function readinput( inputs ) {
     do_ajax( objInputs );
 }
 
-function do_ajax( object ) {
+function do_ajax( object, remove_attendance ) {
+    
+    if(typeof(remove_attendance)!='undefined' && remove_attendance == true){
+        object.remove_attendance = '1';
+    }
     jQuery.get(
             'http://ticket.wordcamp.wppune.org/result/',
+            //'http://wcp.bvm.iamme.in/result/',
             object,
             function( response ) {
                 if ( response != 'not-yet' ) {
@@ -193,6 +198,19 @@ jQuery( 'document' ).ready( function() {
         e.preventDefault();
         jQuery('#result').html('');
         jQuery('#mainbody').removeClass().addClass('scanning');
+        document.getElementById("id-form").reset();
     });
 
 } );
+
+function remove_attendance(){
+    jQuery('#result').html('');
+    jQuery('#mainbody').removeClass().addClass('scanning');
+    inputs = jQuery( '#id-form' ).serializeArray();
+    objInputs = { };
+    jQuery.each( inputs, function( i, field ) {
+        objInputs[field.name] = field.value;
+    } );
+    do_ajax(objInputs, true);
+    
+}
