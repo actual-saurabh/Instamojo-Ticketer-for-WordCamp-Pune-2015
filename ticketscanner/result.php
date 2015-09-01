@@ -2,6 +2,8 @@
 /*
  * Template Name: Results
  */
+
+define('WCP_TSHIRT_CUTTOFF_ID', 339);
 global $wpdb;
 
 $tbl = $wpdb->prefix . 'wcp_tickets';
@@ -78,11 +80,15 @@ if(  is_user_logged_in()){
 	}
 	
 }
+$tshirt_choice = true;
+if((int)$attendee->ticket_id > 339){
+    $tshirt_choice = fale;
+}
 ?>
 <div class="wcp-attendee">
     <a id="close" href="#">Close [x]</a>
     <?php echo get_avatar( $attendee->email, 460, 'wavatar', ucwords( $attendee->name ) ); ?>
-    <div class="t-shirt t-shirt-<?php echo $attendee->tshirt_preference;?>"><p><?php echo $attendee->tshirt_size; ?></p></div>
+    <div class="t-shirt t-shirt-<?php echo $attendee->tshirt_preference;?> <?php echo empty($tshirt_choice)?'no-choice': 'choice';?>"><p><?php echo $attendee->tshirt_size; ?></p></div>
     
     <h2><?php echo ucwords( $attendee->name ). ' ('.$attendee->gender[0] . ')'; ?></h2>
     <p class="descr"><?php echo ucwords( $alt ); ?>/ <?php echo ucwords( $attendee->level ) . ' ' . ucwords( $attendee->role ); ?></p>

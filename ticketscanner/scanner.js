@@ -199,6 +199,7 @@ jQuery( 'document' ).ready( function() {
         jQuery('#result').html('');
         jQuery('#mainbody').removeClass().addClass('scanning');
         document.getElementById("id-form").reset();
+        startwebcam();
     });
 
 } );

@@ -106,6 +106,14 @@ wp_enqueue_script( 'qrcode-scanner', $path . 'ticketscanner/scanner.js', $deps )
                 position:relative;
                 float:left;
                 margin-right:20px;
+                border: 10px solid #fffff0;
+                
+            }
+            div.tshirt.choice{
+                border-color:#990000;
+            }
+            div.tshirt.no-choice{
+                border-color: #8AC007;
             }
             div.t-shirt-F{
                 background-position: -112px 0;
